@@ -4,8 +4,20 @@ from datetime import date
 
 # Listar todas
 def listar_tarefas(request):
-    tarefas = Tarefa.objects.all().values()
-    return JsonResponse(list(tarefas), safe=False)
+    tarefas = Tarefa.objects.all()
+
+    lista = []
+    for t in tarefas:
+        lista.append({
+            "id": t.id,
+            "titulo": t.titulo,
+            "descricao": t.descricao,
+            "status": t.status,
+            "prioridade": t.prioridade,
+            "usuario_responsavel": t.usuario_responsavel.nome if t.usuario_responsavel else None
+        })
+
+    return JsonResponse(lista, safe=False)
 
 # EX 2 - por prioridade
 def tarefas_por_prioridade(request, prioridade):
